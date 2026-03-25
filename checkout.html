@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | Addiction Killer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .topbar {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      gap: 10px;
+    }
+
+    .logo-wrap img {
+      max-height: 52px;
+      width: auto;
+      display: block;
+    }
+
+    .call-btn {
+      background: #f7a53a;
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.75fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px 22px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 16px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .required {
+      color: red;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #cfd4dc;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+      padding-top: 14px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #f05a6b;
+      box-shadow: 0 0 0 3px rgba(240, 90, 107, 0.12);
+    }
+
+    .payment-title {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 26px 0 18px;
+    }
+
+    .radio-row,
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      font-size: 18px;
+    }
+
+    .radio-row input,
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: #111;
+    }
+
+    .place-order-btn {
+      width: 100%;
+      height: 56px;
+      border: none;
+      background: #f45167;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 800;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: 0.2s ease;
+    }
+
+    .place-order-btn:hover {
+      transform: translateY(-1px);
+      background: #eb3f58;
+    }
+
+    .place-order-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .summary-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .summary-divider {
+      border: none;
+      border-top: 1px solid #e6e6e6;
+      margin: 18px 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+
+    .summary-row strong {
+      font-weight: 800;
+    }
+
+    .qty-box {
+      display: inline-flex;
+      border: 2px solid #222;
+      overflow: hidden;
+      min-width: 145px;
+      height: 42px;
+    }
+
+    .qty-btn,
+    .qty-value {
+      width: 48px;
+      height: 42px;
+      border: none;
+      background: #fff;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn {
+      cursor: pointer;
+    }
+
+    .qty-value {
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .grand-total {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .grand-total-value {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .small-note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .success-msg,
+    .error-msg {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .success-msg {
+      background: #e9f9ef;
+      color: #167c38;
+      border: 1px solid #b7e6c7;
+    }
+
+    .error-msg {
+      background: #fff0f2;
+      color: #bb1e38;
+      border: 1px solid #f5b3be;
+    }
+
+    @media (max-width: 991px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        padding: 14px;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 14px;
+      }
+
+      .topbar {
+        padding: 12px 14px;
+      }
+
+      .call-btn {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .payment-title {
+        font-size: 28px;
+      }
+
+      .summary-title {
+        font-size: 24px;
+      }
+
+      .summary-row {
+        font-size: 16px;
+      }
+
+      .grand-total-value {
+        font-size: 30px;
+      }
+
+      .place-order-btn {
+        font-size: 20px;
+        height: 52px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="topbar">
+      <a href="index.html" class="logo-wrap">
+        <img src="images/logo.jpg" alt="veda vital logo" />
+      </a>
+
+      <a href="tel:9910564302">
+        <button class="call-btn">अभी कॉल करें</button>
+      </a>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- LEFT -->
+      <div class="card">
+        <form id="checkoutForm">
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="name">नाम <span class="required">*</span></label>
+              <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="field-group">
+              <label for="phone">मोबाइल नंबर <span class="required">*</span></label>
+              <input type="tel" id="phone" name="phone" maxlength="10" inputmode="numeric" placeholder="10 अंकों का मोबाइल नंबर" required />
+            </div>
+
+            <div class="field-group">
+              <label for="city">शहर <span class="required">*</span></label>
+              <input type="text" id="city" name="city" required />
+            </div>
+
+            <div class="field-group">
+              <label for="state">राज्य <span class="required">*</span></label>
+              <select id="state" name="state" required>
+                <option value="">कृपया चयन कीजिए</option>
+                <option>Andhra Pradesh</option>
+                <option>Arunachal Pradesh</option>
+                <option>Assam</option>
+                <option>Bihar</option>
+                <option>Chhattisgarh</option>
+                <option>Delhi</option>
+                <option>Goa</option>
+                <option>Gujarat</option>
+                <option>Haryana</option>
+                <option>Himachal Pradesh</option>
+                <option>Jharkhand</option>
+                <option>Karnataka</option>
+                <option>Kerala</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>Odisha</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Tamil Nadu</option>
+                <option>Telangana</option>
+                <option>Uttar Pradesh</option>
+                <option>Uttarakhand</option>
+                <option>West Bengal</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="pincode">पिन कोड <span class="required">*</span></label>
+              <input type="text" id="pincode" name="pincode" maxlength="6" inputmode="numeric" required />
+            </div>
+
+            <div class="field-group">
+              <label for="address">घर/फ्लैट नंबर और सड़क का पता <span class="required">*</span></label>
+              <textarea id="address" name="address" required></textarea>
+            </div>
+          </div>
+
+          <div class="payment-title">भुगतान</div>
+
+          <div class="radio-row">
+            <input type="radio" checked disabled />
+            <span>कैश ऑन डिलीवरी</span>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="terms" required checked />
+            <label for="terms" style="margin:0; font-size:16px; font-weight:500;">
+              नियम और शर्तें स्वीकार करता/करती हूँ
+            </label>
+          </div>
+
+          <!-- Hidden fields -->
+          <input type="hidden" name="product_name" id="product_name" value="Addiction Killer" />
+          <input type="hidden" name="price" id="price" value="3359" />
+          <input type="hidden" name="discount" id="discount" value="560" />
+          <input type="hidden" name="quantity" id="quantityInput" value="1" />
+          <input type="hidden" name="grand_total" id="grandTotalInput" value="2799" />
+          <input type="hidden" name="payment_method" value="Cash on Delivery" />
+          <input type="hidden" name="source_page" value="checkout.html" />
+
+          <button type="submit" class="place-order-btn" id="submitBtn">PLACE ORDER</button>
+
+          <div class="success-msg" id="successMsg">
+            आपका ऑर्डर सफलतापूर्वक भेज दिया गया है।
+          </div>
+
+          <div class="error-msg" id="errorMsg">
+            कुछ गड़बड़ हुई है। कृपया दोबारा प्रयास करें।
+          </div>
+        </form>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card summary-card">
+        <div class="summary-title">ऑर्डर सारांश</div>
+        <hr class="summary-divider" />
+
+        <div class="summary-row">
+          <span>Product Name:</span>
+          <strong id="summaryProduct">Addiction Killer</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Quantity:</span>
+          <div class="qty-box">
+            <button type="button" class="qty-btn" id="minusBtn">-</button>
+            <div class="qty-value" id="qtyDisplay">1</div>
+            <button type="button" class="qty-btn" id="plusBtn">+</button>
+          </div>
+        </div>
+
+        <div class="summary-row">
+          <span>Price:</span>
+          <strong>₹ <span id="priceDisplay">3359</span> /-</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Offer Discount:</span>
+          <strong>₹ <span id="discountDisplay">560</span> /-</strong>
+        </div>
+
+        <hr class="summary-divider" />
+
+        <div class="summary-row">
+          <span class="grand-total">Grand Total (₹):</span>
+          <div class="grand-total-value" id="grandTotalDisplay">2799</div>
+        </div>
+
+        <div class="small-note">
+          Quantity बदलने पर कुल राशि अपने आप अपडेट होगी।
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh4x96xeP_hKh7RSVMTokemGAPY7vRoQJBjHwmtXNvh4Wm2vWD58uu_ID8bHEUovTx/exec";
+
+    const basePrice = 3359;
+    const baseDiscount = 560;
+
+    const qtyDisplay = document.getElementById("qtyDisplay");
+    const quantityInput = document.getElementById("quantityInput");
+    const grandTotalDisplay = document.getElementById("grandTotalDisplay");
+    const grandTotalInput = document.getElementById("grandTotalInput");
+    const priceDisplay = document.getElementById("priceDisplay");
+    const discountDisplay = document.getElementById("discountDisplay");
+
+    const plusBtn = document.getElementById("plusBtn");
+    const minusBtn = document.getElementById("minusBtn");
+    const form = document.getElementById("checkoutForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+
+    let qty = 1;
+
+    function updateTotals() {
+      const totalPrice = basePrice * qty;
+      const totalDiscount = baseDiscount * qty;
+      const grandTotal = totalPrice - totalDiscount;
+
+      qtyDisplay.textContent = qty;
+      quantityInput.value = qty;
+      priceDisplay.textContent = totalPrice;
+      discountDisplay.textContent = totalDiscount;
+      grandTotalDisplay.textContent = grandTotal;
+      grandTotalInput.value = grandTotal;
+
+      document.getElementById("price").value = totalPrice;
+      document.getElementById("discount").value = totalDiscount;
+    }
+
+    plusBtn.addEventListener("click", () => {
+      qty++;
+      updateTotals();
+    });
+
+    minusBtn.addEventListener("click", () => {
+      if (qty > 1) {
+        qty--;
+        updateTotals();
+      }
+    });
+
+    document.getElementById("phone").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "").slice(0, 10);
+    });
+
+    document.getElementById("pincode").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "").slice(0, 6);
+    });
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      successMsg.style.display = "none";
+      errorMsg.style.display = "none";
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const city = document.getElementById("city").value.trim();
+      const state = document.getElementById("state").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const terms = document.getElementById("terms").checked;
+
+      if (!name || !phone || !city || !state || !pincode || !address) {
+        errorMsg.textContent = "कृपया सभी आवश्यक जानकारी भरें।";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        errorMsg.textContent = "कृपया सही 10 अंकों का भारतीय मोबाइल नंबर भरें।";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if (!/^\d{6}$/.test(pincode)) {
+        errorMsg.textContent = "कृपया सही 6 अंकों का पिन कोड भरें।";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if (!terms) {
+        errorMsg.textContent = "कृपया नियम और शर्तें स्वीकार करें।";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "SUBMITTING...";
+
+      const formData = new FormData(form);
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          body: formData
+        });
+
+        successMsg.style.display = "block";
+
+        setTimeout(() => {
+          window.location.href = "thankyou.html";
+        }, 1200);
+
+      } catch (error) {
+        errorMsg.textContent = "डेटा भेजने में समस्या आई। कृपया फिर से कोशिश करें।";
+        errorMsg.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "PLACE ORDER";
+      }
+    });
+
+    updateTotals();
+  </script>
+</body>
+</html>
